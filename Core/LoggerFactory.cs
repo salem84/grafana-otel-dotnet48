@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Concurrent;
 
@@ -8,7 +9,8 @@ namespace Core
     {
         private static ILoggerFactory _loggerFactory;
 
-        private static ConcurrentDictionary<Type, ILogger> loggerByType = new ConcurrentDictionary<Type, ILogger>();
+        private static ConcurrentDictionary<Type, Microsoft.Extensions.Logging.ILogger> loggerByType
+            = new ConcurrentDictionary<Type, Microsoft.Extensions.Logging.ILogger>();
 
         public static void Initialize(ILoggerFactory loggerFactory)
         {
@@ -20,13 +22,17 @@ namespace Core
 
         public static void Initialize()
         {
-            _loggerFactory = LoggerFactory.Create(builder =>
-                    builder.AddConsole()
+            var serilogLogger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .CreateLogger();
 
+            _loggerFactory = LoggerFactory.Create(builder => builder
+                    //.AddConsole()
+                    .AddSerilog(serilogLogger)
             );
         }
 
-        public static ILogger GetLog<T>()
+        public static Microsoft.Extensions.Logging.ILogger GetLog<T>()
         {
             if (_loggerFactory is null)
                 throw new InvalidOperationException("FnLoggerFactory is not initialized yet.");
