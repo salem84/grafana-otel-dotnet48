@@ -8,12 +8,21 @@ namespace Otel.ConsoleApp
     {
         static void Main(string[] args)
         {
-            FnLoggerFactory.Initialize();
+            try
+            {
+                FnLoggerFactory.Initialize();
+                FnTraceProvider.Initialize();
+                var batch = new Batch();
+                batch.Start();
 
-            var batch = new Batch();
-            batch.Start();
 
-            Console.ReadLine();
+            }
+            finally
+            {
+                Console.ReadLine();
+                FnTraceProvider.Dispose();
+            }
+
         }
     }
 

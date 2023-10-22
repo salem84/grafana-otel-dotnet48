@@ -1,5 +1,6 @@
 ﻿using Core;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Otel.ConsoleApp
 {
@@ -13,7 +14,25 @@ namespace Otel.ConsoleApp
 
         internal void Call()
         {
-            Logger.LogWarning("missing params");
+            using (var parentActivity = DiagnosticsConfig.Source.StartActivity("ParentActivity"))
+            {
+                var rnd = new Random(Guid.NewGuid().GetHashCode());
+                for (int i = 0; i < 5; i++)
+                {
+                    using (var childActivity = DiagnosticsConfig.Source.StartActivity("ChildActivity"))
+                    {
+                        var value = rnd.Next(100);
+                        if (value % 2 == 0)
+                        {
+                            Logger.LogWarning($"Valore pari: {value}");
+                        }
+                        else
+                        {
+                            Logger.LogError($"Valore dispari: {value}");
+                        }
+                    }
+                }
+            }
         }
     }
 }
