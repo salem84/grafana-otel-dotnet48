@@ -1,14 +1,15 @@
 ﻿using OpenTelemetry;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System;
 
 namespace Core
 {
-    public class FnTraceProvider
+    public class FnTracerProvider
     {
         private static TracerProvider _tracerProvider;
 
-        public static void Initialize()
+        public static void Initialize(string serviceName)
         {
             if (_tracerProvider != null)
                 throw new InvalidOperationException("FnTraceProvider already initialized!");
@@ -24,9 +25,9 @@ namespace Core
                 opt.Endpoint = new Uri("http://localhost:4318/v1/traces");
                 opt.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
             })
-            //.SetResourceBuilder(
-            //    ResourceBuilder.CreateDefault()
-            //        .AddService(serviceName: "my-service-name", serviceVersion: "1.0.0"))
+            .SetResourceBuilder(
+                ResourceBuilder.CreateDefault()
+                    .AddService(serviceName: serviceName/*, serviceVersion: serviceVersion*/))
 
             .Build();
         }
@@ -35,6 +36,7 @@ namespace Core
         {
             if (_tracerProvider != null)
             {
+                _tracerProvider.ForceFlush();
                 _tracerProvider.Dispose();
             }
         }

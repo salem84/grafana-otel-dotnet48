@@ -20,9 +20,9 @@ namespace Core
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
 
-        public static void Initialize()
+        public static void Initialize(string serviceName)
         {
-            Serilog.Debugging.SelfLog.Enable(Console.Out);
+            // Serilog.Debugging.SelfLog.Enable(Console.Out);
 
             var serilogLogger = new LoggerConfiguration()
                 .WriteTo.Console()
@@ -30,13 +30,16 @@ namespace Core
                 {
                     options.Endpoint = "http://localhost:4318/v1/logs";
                     options.Protocol = Serilog.Sinks.OpenTelemetry.OtlpProtocol.HttpProtobuf; // disabilitato GRPC perchè richiede su .NET 4.8 una configurazione aggiuntiva
+                    options.ResourceAttributes["service.name"] = serviceName;
+
+
                 })
                 .CreateLogger();
 
             _loggerFactory = LoggerFactory.Create(builder => builder
                     //.AddConsole() // Standard Log Console
                     .AddSerilog(serilogLogger)
-                );
+                    );
         }
 
         public static Microsoft.Extensions.Logging.ILogger GetLog<T>()
@@ -46,6 +49,14 @@ namespace Core
 
             return loggerByType
                 .GetOrAdd(typeof(T), _loggerFactory.CreateLogger<T>());
+        }
+
+        public static void Dispose()
+        {
+            if (_loggerFactory != null)
+            {
+                _loggerFactory.Dispose();
+            }
         }
     }
 }

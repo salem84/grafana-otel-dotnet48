@@ -10,8 +10,11 @@ namespace Otel.ConsoleApp
         {
             try
             {
-                FnLoggerFactory.Initialize();
-                FnTraceProvider.Initialize();
+                var serviceName = "ConsoleApp";
+                FnLoggerFactory.Initialize(serviceName);
+                FnTracerProvider.Initialize(serviceName);
+                FnMeterProvider.Initialize(serviceName);
+
                 var batch = new Batch();
                 batch.Start();
 
@@ -20,7 +23,9 @@ namespace Otel.ConsoleApp
             finally
             {
                 Console.ReadLine();
-                FnTraceProvider.Dispose();
+                FnTracerProvider.Dispose();
+                FnMeterProvider.Dispose();
+                FnLoggerFactory.Dispose();
             }
 
         }
