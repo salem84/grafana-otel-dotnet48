@@ -22,14 +22,21 @@ namespace Core
 
         public static void Initialize()
         {
+            Serilog.Debugging.SelfLog.Enable(Console.Out);
+
             var serilogLogger = new LoggerConfiguration()
                 .WriteTo.Console()
+                .WriteTo.OpenTelemetry(options =>
+                {
+                    options.Endpoint = "http://localhost:4318/v1/logs";
+                    options.Protocol = Serilog.Sinks.OpenTelemetry.OtlpProtocol.HttpProtobuf; // disabilitato GRPC perchè richiede su .NET 4.8 una configurazione aggiuntiva
+                })
                 .CreateLogger();
 
             _loggerFactory = LoggerFactory.Create(builder => builder
-                    //.AddConsole()
+                    //.AddConsole() // Standard Log Console
                     .AddSerilog(serilogLogger)
-            );
+                );
         }
 
         public static Microsoft.Extensions.Logging.ILogger GetLog<T>()
