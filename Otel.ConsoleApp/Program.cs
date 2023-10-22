@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace Otel.ConsoleApp
 {
@@ -10,6 +8,26 @@ namespace Otel.ConsoleApp
     {
         static void Main(string[] args)
         {
+            FnLoggerFactory.Initialize();
+
+            var batch = new Batch();
+            batch.Start();
+
+            Console.ReadLine();
+        }
+    }
+
+    internal class Batch
+    {
+        private ILogger Logger { get => FnLoggerFactory.GetLog<Batch>(); }
+
+        public void Start()
+        {
+            Logger.LogInformation("batch start");
+            var service = new BatchService();
+            service.Call();
+            Logger.LogInformation("batch end");
+
         }
     }
 }

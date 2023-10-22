@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34212.112
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Otel.ConsoleApp", "Otel.ConsoleApp\Otel.ConsoleApp.csproj", "{8DB18B9A-7614-4A0C-A5AE-61122AC32C22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{EAAC44AC-14F4-4662-B592-D66C7AD967F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{8DB18B9A-7614-4A0C-A5AE-61122AC32C22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DB18B9A-7614-4A0C-A5AE-61122AC32C22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DB18B9A-7614-4A0C-A5AE-61122AC32C22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAAC44AC-14F4-4662-B592-D66C7AD967F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAAC44AC-14F4-4662-B592-D66C7AD967F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAAC44AC-14F4-4662-B592-D66C7AD967F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAAC44AC-14F4-4662-B592-D66C7AD967F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
